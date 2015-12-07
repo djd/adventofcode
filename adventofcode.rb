@@ -26,6 +26,54 @@ puts "adventofcode"
 File.open(file("solutions.txt"), "w").write("")
 
 ################################################################################
+# Day 6
+
+class ChristmasCheer
+  def initialize
+    @grid = (0..999).to_a.map! do |y|
+      (0..999).to_a.map! do |x|
+        0
+      end
+    end
+  end
+  def visualize
+    (0..999).to_a.reverse.each do |y|
+      row = @grid[y].map do |x|
+        x == 1 ? "*" : " "
+      end
+      p row.join("")
+    end
+  end
+  def lit
+    @grid.flatten.sum
+  end
+  def doit(instruction)
+    cmd, drop, sx, sy, drop, ex, ey = *instruction.scan(/(.*?( |).*?) (\d+),(\d+) (.*?) (\d+),(\d+)/).first
+    (sy.to_i..ey.to_i).each do |y|
+      (sx.to_i..ex.to_i).each do |x|
+        case cmd
+        when "turn off"
+          @grid[y][x] = 0
+        when "turn on"
+          @grid[y][x] = 1
+        when "toggle"
+          current = @grid[y][x]
+          @grid[y][x] = current == 0 ? 1 : 0
+        end
+      end
+    end
+  end
+end
+
+cheer = ChristmasCheer.new
+
+input(6).split("\n").each do |instruction|
+  cheer.doit(instruction)
+end
+
+output(6.1, cheer.lit)
+
+################################################################################
 # Day 5
 
 input5 = input(5).split("\n")
