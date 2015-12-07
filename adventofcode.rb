@@ -3,13 +3,17 @@
 require 'pathname'
 require 'digest/md5'
 
+def file(path)
+  Pathname.new(File.dirname(File.expand_path(__FILE__))).join(path)
+end
+
 def input(set)
-  dir = Pathname.new(File.dirname(File.expand_path(__FILE__)))
-  File.open(dir.join("input#{set}.txt"), "r").read.strip
+  File.open(file("input#{set}.txt"), "r").read.strip
 end
 
 def output(set, value)
-  puts "  result #{set} => #{value}"
+  puts "  " + result = "problem #{set} => #{value}"
+  File.open(file("solutions.txt"), "a").write(result + "\n")
 end
 
 module Enumerable
@@ -19,6 +23,23 @@ module Enumerable
 end
 
 puts "adventofcode"
+File.open(file("solutions.txt"), "w").write("")
+
+################################################################################
+# Day 5
+
+input5 = input(5).split("\n")
+
+nice_strings = input5.select do |str|
+  !str.match(/(ab|cd|pq|xy)/) && !(str.scan(/(a|e|i|o|u)/).size < 3) && str.match(/((.)\2)/)
+end
+output(5.1, nice_strings.size)
+
+nice_strings = input5.select do |str|
+  str.match(/(..).*\1/) && str.match(/(.).\1/)
+end
+
+output(5.2, nice_strings.size)
 
 ################################################################################
 # Day 4
